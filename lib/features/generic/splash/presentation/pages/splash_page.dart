@@ -3,6 +3,7 @@ import 'package:flutter_auth/extensions/extensions.dart';
 import 'package:flutter_auth/features/auth/login/login.dart';
 import 'package:flutter_auth/features/common/common.dart';
 import 'package:flutter_auth/features/generic/splash/splash.dart';
+import 'package:flutter_auth/features/home/home.dart';
 import 'package:flutter_auth/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -14,7 +15,7 @@ class SplashPage extends StatelessWidget {
   /// Creates an instance of the SplashPage.
   const SplashPage({super.key});
 
-  /// The path for the splash page.
+  /// Splash router path '/'
   static const String path = '/';
 
   @override
@@ -24,7 +25,7 @@ class SplashPage extends StatelessWidget {
       final splashState = context.read<SplashCubit>().state;
       if (splashState.isAuthenticated) {
         context.read<AuthenticationCubit>().setAuthenticated(splashState.user!);
-        // TODO(uncomment): context.pushReplacement(HomePage.path);
+        context.pushReplacement(HomePage.path);
         return;
       }
 
@@ -36,7 +37,7 @@ class SplashPage extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return BlocListener<SplashCubit, SplashState>(
-            listenWhen: (previous, current) => previous.isAuthenticated != current.isAuthenticated,
+            // listenWhen: (previous, current) => previous.isAuthenticated != current.isAuthenticated,
             listener: navigateToNextPage,
             child: const Scaffold(
               body: SplashPageUiMiddle(),

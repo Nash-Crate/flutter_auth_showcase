@@ -201,7 +201,7 @@ final _inputDecorationTheme = InputDecorationTheme(
     fontWeight: FontWeight.w400,
   ),
   prefixStyle: GoogleFonts.poppins(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       color: kInputText,
       // fontSize: 26.sp,
       fontWeight: FontWeight.w500,
