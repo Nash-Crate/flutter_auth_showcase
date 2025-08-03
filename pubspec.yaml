@@ -23,6 +23,7 @@ dependencies:
 
   # firebase
   firebase_core: ^4.0.0
+  firebase_auth: ^6.0.0
 
   # functional
   fpdart: ^1.1.1
@@ -52,6 +53,7 @@ dependencies:
 
   # utils
   collection: ^1.19.1
+  google_fonts: ^6.3.0
   freezed_annotation: ^3.1.0
   logger: ^2.6.1
   package_info_plus: ^8.3.0

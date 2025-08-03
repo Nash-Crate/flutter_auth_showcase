@@ -10,75 +10,41 @@ part of 'theme.dart';
 /// 'Neutral' roles are used for surfaces and backgrounds, as well as high emphasis text and icons.
 /// https://m3.material.io/styles/color/the-color-system/color-roles
 
-/// Primary
-const kPrimary = Color.fromRGBO(34, 151, 243, 1);
+/// primary
+const kPrimary = Color.fromRGBO(76, 208, 128, 1);
 
-/// OnPrimary
-const kOnPrimary = Color.fromRGBO(0, 0, 0, 1);
+/// onPrimary
+const Color kOnPrimary = Colors.white;
 
-/// PrimaryContainer
-const kPrimaryContainer = Color.fromRGBO(0, 0, 0, 1);
+/// secondary
+const kSecondary = Color.fromRGBO(255, 199, 39, 1);
 
-/// OnPrimaryContainer
-const kOnPrimaryContainer = Color.fromRGBO(29, 37, 57, 1);
+/// onSecondary
+const Color kOnSecondary = Colors.white;
 
-/* surface colors */
+/// background
+const kSurface = Color.fromRGBO(242, 245, 248, 1);
 
-/// Surface
-const kSurface = Color.fromRGBO(255, 255, 255, 1);
+/// onBackground
+const kOnSurface = Color.fromRGBO(116, 119, 127, 1);
 
-/// OnSurface
-const kOnSurface = Color.fromRGBO(51, 51, 51, 1);
+/// error
+const kError = Color.fromRGBO(255, 137, 125, 1);
 
-/// SurfaceContainer
-const kSurfaceContainer = Color.fromRGBO(209, 217, 225, 1);
+/// success
+const kSuccess = Color.fromRGBO(36, 150, 137, 1);
 
-/* outline colors */
+/// outline button label
+const kOutlineBtnLabel = Color.fromRGBO(146, 146, 146, 1);
 
-/// Outline
-const kOutline = Color.fromRGBO(42, 42, 42, 1);
+/// text input
+const kInputText = Color.fromRGBO(94, 97, 117, 1);
 
-/// OutlineVariant
-const kOutlineFocused = Color.fromRGBO(26, 26, 26, 1);
+/// text input label
+const kInputLabel = Color.fromRGBO(130, 130, 156, 1);
 
-/// OutlineVariant
-const kOutlineVariant = Color.fromRGBO(96, 96, 96, 1);
+/// text input background
+const kInputBg = Color.fromRGBO(249, 249, 249, 1);
 
-/* statuses */
-
-/// Error
-const kError = Color.fromRGBO(244, 124, 124, 1);
-
-/// Info
-const kInfo = Color.fromRGBO(56, 193, 225, 1);
-
-/// Success
-const kSuccess = Color.fromRGBO(86, 198, 170, 1);
-
-/// Disabled
-const kDisabled = Color.fromRGBO(176, 183, 191, 1);
-
-/* Colors */
-/// gray900
-const kGray900 = Color.fromRGBO(17, 25, 39, 1);
-
-/// gray800
-const kGray800 = Color.fromRGBO(31, 42, 55, 1);
-
-/// gray700
-const kGray600 = Color.fromRGBO(77, 87, 97, 1);
-
-/// gray600
-const kGray500 = Color.fromRGBO(108, 115, 127, 1);
-
-/// gray400
-const kGray400 = Color.fromRGBO(157, 164, 174, 1);
-
-/// gray300
-const kGray300 = Color.fromRGBO(210, 214, 219, 1);
-
-/// gray200
-const kGray200 = Color.fromRGBO(229, 231, 235, 1);
-
-/// gray100
-const kGray50 = Color.fromRGBO(249, 250, 251, 1);
+/// text input background
+const kDisabledBg = Color.fromRGBO(246, 247, 248, 1);
