@@ -1,0 +1,6 @@
+base_locale: en_US
+namespaces: true # enable this feature
+fallback_strategy: base_locale
+input_directory: lib/i18n
+output_directory: lib/i18n # optional
+output_file_name: translations.g.dart # set file name (mandatory)
