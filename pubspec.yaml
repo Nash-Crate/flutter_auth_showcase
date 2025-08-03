@@ -21,6 +21,9 @@ dependencies:
   get_it: ^8.2.0
   injectable: ^2.5.1
 
+  # firebase
+  firebase_core: ^4.0.0
+
   # functional
   fpdart: ^1.1.1
 
@@ -62,7 +65,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   freezed: ^3.2.0
   injectable_generator: ^2.8.1
-  json_serializable: ^6.9.5
+  json_serializable: ^6.10.0
 
   # testing
   flutter_test:

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "798992916814",
+    "project_id": "nashcrate-flutter-showcase",
+    "storage_bucket": "nashcrate-flutter-showcase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:798992916814:android:41f6b844f2f4a3353f7e1f",
+        "android_client_info": {
+          "package_name": "com.nashcrate.flutter_auth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDltKYSd3cY1A8Y_pKyVMcqC-FNC2_7BSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
