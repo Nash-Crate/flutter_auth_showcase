@@ -1,5 +1,5 @@
 /// Authentication platform enum
-enum AuthenticationPlatform {
+enum AuthenticationStrategy {
   /// Firebase login
   firebase('Firebase'),
 
@@ -12,7 +12,7 @@ enum AuthenticationPlatform {
   /// GraphQL login
   graphql('GraphQL');
 
-  const AuthenticationPlatform(this.label);
+  const AuthenticationStrategy(this.label);
 
   /// label for the login platform
   final String label;

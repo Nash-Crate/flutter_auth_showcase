@@ -44,14 +44,14 @@ class _LoginPageUiMiddleState extends State<LoginPageUiMiddle> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: BlocBuilder<LoginCubit, LoginState>(
-                buildWhen: (previous, current) => previous.authPlatform != current.authPlatform,
+                buildWhen: (previous, current) => previous.authStrategy != current.authStrategy,
                 builder: (context, state) {
                   return ToggleButtons(
-                    isSelected: AuthenticationPlatform.values
-                        .map((p) => p == state.authPlatform)
+                    isSelected: AuthenticationStrategy.values
+                        .map((p) => p == state.authStrategy)
                         .toList(),
-                    onPressed: context.read<LoginCubit>().onSetAuthenticationPlatform,
-                    children: AuthenticationPlatform.values
+                    onPressed: context.read<LoginCubit>().onSetAuthenticationStrategy,
+                    children: AuthenticationStrategy.values
                         .map(
                           (v) => Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -102,8 +102,8 @@ class _LoginPageUiMiddleState extends State<LoginPageUiMiddle> {
 
             const SizedBox(height: 10),
 
-            BlocSelector<LoginCubit, LoginState, AuthenticationPlatform>(
-              selector: (state) => state.authPlatform,
+            BlocSelector<LoginCubit, LoginState, AuthenticationStrategy>(
+              selector: (state) => state.authStrategy,
               builder: (context, authPlatform) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,

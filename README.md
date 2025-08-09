@@ -1,3 +1,3 @@
-# Flutter Auth
+# Flutter Showcase
 
-Flutter project to demo multiple authentication strategies.
+Flutter project to demo multiple strategies.

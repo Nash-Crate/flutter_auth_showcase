@@ -11,9 +11,11 @@ part 'home_state.dart';
 @injectable
 class HomeCubit extends Cubit<HomeState> {
   /// Constructor
-  HomeCubit() : super(HomeState.initial()) {
+  HomeCubit(this._addNewLog) : super(HomeState.initial()) {
     init();
   }
+
+  final AddNewLog _addNewLog;
 
   /// Initialize home functions
   Future<void> init() async {
@@ -27,6 +29,18 @@ class HomeCubit extends Cubit<HomeState> {
   /// Method to handle user logout
   Future<void> logOut() async {
     emit(state.copyWith(processing: true, logoutResult: null));
+
+    // log the result
+    const logParams = NewLogParams(
+      type: LogType.login,
+      method: LogMethod.logout,
+      // parameters: {
+      //   'email': state.email.value,
+      //   'authStrategy': state.authStrategy.label,
+      // },
+      message: 'Logout successful',
+    );
+    await _addNewLog(logParams);
 
     await Future<void>.delayed(const Duration(seconds: 1));
     const Either<Failure, Unit> result = Right(unit);
