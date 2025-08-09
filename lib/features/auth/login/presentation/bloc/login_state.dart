@@ -1,20 +1,5 @@
 part of 'login_cubit.dart';
 
-/// Login platform enum
-enum LoginPlatform {
-  /// Firebase login
-  firebase,
-
-  /// Superbase login
-  superbase,
-
-  /// Rest API login
-  restApi,
-
-  /// GraphQL login
-  graphql,
-}
-
 /// Login state
 @freezed
 abstract class LoginState with _$LoginState {
@@ -25,7 +10,7 @@ abstract class LoginState with _$LoginState {
     @Default(false) bool isProcessing,
     Either<Failure, AuthUser>? result,
 
-    @Default(LoginPlatform.firebase) LoginPlatform loginPlatform,
+    @Default(AuthenticationPlatform.firebase) AuthenticationPlatform authPlatform,
   }) = _LoginState;
 
   /// Initial state

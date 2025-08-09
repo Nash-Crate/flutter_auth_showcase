@@ -36,40 +36,86 @@ class _LoginPageUiMiddleState extends State<LoginPageUiMiddle> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          AppTextField(
-            label: 'Email',
-            hint: 'john@g.co',
-            controller: _emailTec,
-            focusNode: _emailFocusNode,
-            onChanged: context.read<LoginCubit>().onSetEmail,
-          ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.h),
+        child: Column(
+          children: [
+            SizedBox(height: 30.h),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: BlocBuilder<LoginCubit, LoginState>(
+                buildWhen: (previous, current) => previous.authPlatform != current.authPlatform,
+                builder: (context, state) {
+                  return ToggleButtons(
+                    isSelected: AuthenticationPlatform.values
+                        .map((p) => p == state.authPlatform)
+                        .toList(),
+                    onPressed: context.read<LoginCubit>().onSetAuthenticationPlatform,
+                    children: AuthenticationPlatform.values
+                        .map(
+                          (v) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              v.label,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 30.h),
 
-          SizedBox(height: 10.h),
+            AppTextField(
+              label: 'Email',
+              hint: 'john@g.co',
+              controller: _emailTec,
+              focusNode: _emailFocusNode,
+              onChanged: context.read<LoginCubit>().onSetEmail,
+            ),
 
-          AppTextField(
-            label: 'Password',
-            hint: '********',
-            controller: _passwordTec,
-            focusNode: _passwordFocusNode,
-            obscureText: true,
-            onChanged: context.read<LoginCubit>().onSetPassword,
-          ),
+            SizedBox(height: 10.h),
 
-          SizedBox(height: 30.h),
+            AppTextField(
+              label: 'Password',
+              hint: '********',
+              controller: _passwordTec,
+              focusNode: _passwordFocusNode,
+              obscureText: true,
+              onChanged: context.read<LoginCubit>().onSetPassword,
+            ),
 
-          BlocBuilder<LoginCubit, LoginState>(
-            buildWhen: (previous, current) => previous.isProcessing != current.isProcessing,
-            builder: (context, state) {
-              return AppElevatedButton(
-                label: 'Login',
-                isLoading: state.isProcessing,
-                onPressed: context.read<LoginCubit>().onSubmit,
-              );
-            },
-          ),
-        ],
+            SizedBox(height: 30.h),
+
+            BlocBuilder<LoginCubit, LoginState>(
+              buildWhen: (previous, current) => previous.isProcessing != current.isProcessing,
+              builder: (context, state) {
+                return AppElevatedButton(
+                  label: 'Login',
+                  isLoading: state.isProcessing,
+                  onPressed: context.read<LoginCubit>().onSubmit,
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            BlocSelector<LoginCubit, LoginState, AuthenticationPlatform>(
+              selector: (state) => state.authPlatform,
+              builder: (context, authPlatform) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('with '),
+                    Text(authPlatform.label),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

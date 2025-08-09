@@ -1,3 +1,4 @@
+import 'package:flutter_auth/features/auth/login/core/usecases/login_with_email_password_superbase.dart';
 import 'package:flutter_auth/features/auth/login/login.dart';
 import 'package:flutter_auth/features/common/common.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,9 +13,15 @@ part 'login_state.dart';
 @injectable
 class LoginCubit extends Cubit<LoginState> {
   /// Constructor
-  LoginCubit(this._loginWithEmailPasswordFirebase) : super(LoginState.initial());
+  LoginCubit(this._loginWithEmailPasswordFirebase, this._loginWithEmailPasswordSuperbase)
+    : super(LoginState.initial());
 
   final LoginWithEmailPasswordFirebase _loginWithEmailPasswordFirebase;
+  final LoginWithEmailPasswordSuperbase _loginWithEmailPasswordSuperbase;
+
+  /// on set authentication platform
+  void onSetAuthenticationPlatform(int index) =>
+      emit(state.copyWith(authPlatform: AuthenticationPlatform.values[index]));
 
   /// on set email
   void onSetEmail(String email) => emit(state.copyWith(email: EmailAddress(email)));
@@ -35,16 +42,15 @@ class LoginCubit extends Cubit<LoginState> {
 
       late final Either<Failure, AuthUser> res;
 
-      switch (state.loginPlatform) {
-        case LoginPlatform.firebase:
+      switch (state.authPlatform) {
+        case AuthenticationPlatform.firebase:
           res = await _loginWithEmailPasswordFirebase(params);
-        case LoginPlatform.superbase:
+        case AuthenticationPlatform.superbase:
+          res = await _loginWithEmailPasswordSuperbase(params);
+        case AuthenticationPlatform.restApi:
           // TODO: Handle this case.
           throw UnimplementedError();
-        case LoginPlatform.restApi:
-          // TODO: Handle this case.
-          throw UnimplementedError();
-        case LoginPlatform.graphql:
+        case AuthenticationPlatform.graphql:
           // TODO: Handle this case.
           throw UnimplementedError();
       }

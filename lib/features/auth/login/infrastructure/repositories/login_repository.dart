@@ -15,4 +15,9 @@ class LoginRepository implements ILoginRepository {
   AsyncFailT<AuthUser> loginWithEmailPasswordFirebase(LoginWithEmailPasswordParams params) {
     return _loginDatasource.loginWithEmailPasswordFirebase(params);
   }
+
+  @override
+  AsyncFailT<AuthUser> loginWithEmailPasswordSuperbase(LoginWithEmailPasswordParams params) {
+    return _loginDatasource.loginWithEmailPasswordSuperbase(params);
+  }
 }
