@@ -1,4 +1,4 @@
-import 'package:flutter_auth/features/common/errors/errors.dart';
+import 'package:flutter_showcase/features/common/errors/errors.dart';
 
 /// Centralized [UnexpectedValueError] class
 class UnexpectedValueError<T> extends Error {

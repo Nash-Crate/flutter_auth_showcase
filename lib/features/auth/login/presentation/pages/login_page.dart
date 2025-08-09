@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/extensions/extensions.dart';
-import 'package:flutter_auth/features/auth/login/login.dart';
-import 'package:flutter_auth/features/common/common.dart';
-import 'package:flutter_auth/features/home/home.dart';
-import 'package:flutter_auth/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_showcase/extensions/extensions.dart';
+import 'package:flutter_showcase/features/auth/login/login.dart';
+import 'package:flutter_showcase/features/common/common.dart';
+import 'package:flutter_showcase/features/home/home.dart';
+import 'package:flutter_showcase/injection.dart';
 import 'package:go_router/go_router.dart';
 
 part 'login_page.app_bar.dart';

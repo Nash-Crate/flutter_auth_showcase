@@ -1,11 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/features/common/common.dart';
-import 'package:flutter_auth/injection.dart';
-import 'package:flutter_auth/routing/router.dart';
-import 'package:flutter_auth/theme/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_showcase/features/common/common.dart';
+import 'package:flutter_showcase/injection.dart';
+import 'package:flutter_showcase/routing/router.dart';
+import 'package:flutter_showcase/theme/theme.dart';
 
 /// BotToastInit instance
 final TransitionBuilder botToastBuilder = BotToastInit();

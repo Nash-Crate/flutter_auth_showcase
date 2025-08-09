@@ -1,6 +1,6 @@
 // Needed for usecases implementation
 // ignore_for_file: one_member_abstracts
-import 'package:flutter_auth/features/common/errors/errors.dart';
+import 'package:flutter_showcase/features/common/errors/errors.dart';
 import 'package:fpdart/fpdart.dart';
 
 /// Interface for usecase with [Params] and returns [Type]

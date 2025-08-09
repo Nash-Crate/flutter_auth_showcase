@@ -1,4 +1,4 @@
-import 'package:flutter_auth/features/common/common.dart';
+import 'package:flutter_showcase/features/common/common.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'login_email_password_params.freezed.dart';

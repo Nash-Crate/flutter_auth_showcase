@@ -1,4 +1,4 @@
-import 'package:flutter_auth/features/common/common.dart';
+import 'package:flutter_showcase/features/common/common.dart';
 import 'package:fpdart/fpdart.dart';
 
 /// Type alias for a function that returns a Future of [Either<Failure, T>]

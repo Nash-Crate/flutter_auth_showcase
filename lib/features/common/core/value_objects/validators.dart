@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/features/common/common.dart';
+import 'package:flutter_showcase/features/common/common.dart';
 import 'package:fpdart/fpdart.dart';
 
 /// returns the maximum integer value dart allows

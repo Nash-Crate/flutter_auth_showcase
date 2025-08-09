@@ -1,5 +1,5 @@
-import 'package:flutter_auth/features/auth/login/login.dart';
-import 'package:flutter_auth/features/common/common.dart';
+import 'package:flutter_showcase/features/auth/login/login.dart';
+import 'package:flutter_showcase/features/common/common.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 

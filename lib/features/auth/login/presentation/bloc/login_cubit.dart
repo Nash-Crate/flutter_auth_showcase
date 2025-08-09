@@ -1,7 +1,7 @@
-import 'package:flutter_auth/features/auth/login/core/usecases/login_with_email_password_superbase.dart';
-import 'package:flutter_auth/features/auth/login/login.dart';
-import 'package:flutter_auth/features/common/common.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_showcase/features/auth/login/core/usecases/login_with_email_password_superbase.dart';
+import 'package:flutter_showcase/features/auth/login/login.dart';
+import 'package:flutter_showcase/features/common/common.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -35,10 +35,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     // only proceed if both email and password are valid
     if (state.email.isValid && state.password.isValid) {
-      final params = LoginWithEmailPasswordParams(
-        email: state.email,
-        password: state.password,
-      );
+      final params = LoginWithEmailPasswordParams(email: state.email, password: state.password);
 
       late final Either<Failure, AuthUser> res;
 

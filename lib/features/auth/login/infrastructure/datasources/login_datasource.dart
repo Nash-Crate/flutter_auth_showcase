@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:flutter_auth/features/auth/login/login.dart';
-import 'package:flutter_auth/features/common/common.dart';
+import 'package:flutter_showcase/features/auth/login/login.dart';
+import 'package:flutter_showcase/features/common/common.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;

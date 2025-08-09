@@ -1,7 +1,7 @@
 // Following "Really Obvious Code" (ROC),
 // ignore_for_file: public_member_api_docs
 
-import 'package:flutter_auth/features/common/common.dart';
+import 'package:flutter_showcase/features/common/common.dart';
 import 'package:fpdart/fpdart.dart';
 
 class EmailAddress extends ValueObject<String> {

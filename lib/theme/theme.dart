@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/extensions/extensions.dart';
+import 'package:flutter_showcase/extensions/extensions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 part 'app_colors.dart';
@@ -47,18 +47,10 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
       fontFamily: 'ProximaNova',
     ),
     displaySmall: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        fontSize: 36.sp,
-        fontWeight: FontWeight.w400,
-        color: Colors.black,
-      ),
+      textStyle: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w400, color: Colors.black),
     ),
     headlineMedium: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        fontSize: 28.sp,
-        fontWeight: FontWeight.w700,
-        color: Colors.black,
-      ),
+      textStyle: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w700, color: Colors.black),
     ),
     bodyLarge: GoogleFonts.poppins(
       textStyle: TextStyle(
@@ -68,25 +60,13 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
       ),
     ),
     bodyMedium: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w300,
-        color: Colors.black,
-      ),
+      textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w300, color: Colors.black),
     ),
     bodySmall: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        fontSize: 12.sp,
-        fontWeight: FontWeight.w500,
-        color: kInputText,
-      ),
+      textStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: kInputText),
     ),
     labelLarge: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        color: Colors.black,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w700,
-      ),
+      textStyle: TextStyle(color: Colors.black, fontSize: 14.sp, fontWeight: FontWeight.w700),
     ),
     labelMedium: TextStyle(
       color: const Color.fromRGBO(90, 107, 104, 1),
@@ -102,31 +82,17 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
       ),
     ),
     titleLarge: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        color: kInputText,
-        fontSize: 22.sp,
-        fontWeight: FontWeight.w500,
-      ),
+      textStyle: TextStyle(color: kInputText, fontSize: 22.sp, fontWeight: FontWeight.w500),
     ),
     titleMedium: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        color: kInputText,
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w500,
-      ),
+      textStyle: TextStyle(color: kInputText, fontSize: 16.sp, fontWeight: FontWeight.w500),
     ),
     titleSmall: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        color: kSecondary,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w400,
-      ),
+      textStyle: TextStyle(color: kSecondary, fontSize: 14.sp, fontWeight: FontWeight.w400),
     ),
   ),
   dividerColor: Colors.black,
-  appBarTheme: const AppBarTheme(
-    surfaceTintColor: Colors.transparent,
-  ),
+  appBarTheme: const AppBarTheme(surfaceTintColor: Colors.transparent),
   // dialogTheme: DialogThemeData(
   //   titleTextStyle: GoogleFonts.poppins(
   //     textStyle: TextStyle(
@@ -153,16 +119,10 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
     ),
   ),
   listTileTheme: ListTileThemeData(
-    titleTextStyle: const TextStyle(
-      color: Color.fromRGBO(58, 58, 58, 1),
-    ),
+    titleTextStyle: const TextStyle(color: Color.fromRGBO(58, 58, 58, 1)),
     selectedColor: const Color.fromRGBO(58, 58, 58, 1),
     selectedTileColor: const Color.fromRGBO(209, 232, 237, 0.6),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.sp),
-      ),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.sp))),
   ),
   scaffoldBackgroundColor: Colors.white,
   outlinedButtonTheme: OutlinedButtonThemeData(
@@ -186,9 +146,7 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
 /// Dark theme
 final darkTheme = ThemeData.dark();
 
-final _buttonRadius = RoundedRectangleBorder(
-  borderRadius: BorderRadius.circular(10.r),
-);
+final _buttonRadius = RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r));
 
 /// Input decoration theme for,
 /// TextField, TextFormField

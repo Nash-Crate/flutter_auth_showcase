@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/features/auth/login/login.dart';
-import 'package:flutter_auth/features/home/home.dart';
-import 'package:flutter_auth/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_showcase/features/auth/login/login.dart';
+import 'package:flutter_showcase/features/home/home.dart';
+import 'package:flutter_showcase/injection.dart';
 import 'package:go_router/go_router.dart';
 
 part 'home_page.app_bar.dart';
@@ -37,9 +37,7 @@ class HomePage extends StatelessWidget {
                   if (!processing) return const SizedBox.shrink();
                   return const ColoredBox(
                     color: Colors.black54,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: Center(child: CircularProgressIndicator()),
                   );
                 },
               ),
