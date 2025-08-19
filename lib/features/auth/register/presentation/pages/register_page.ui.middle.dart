@@ -52,22 +52,9 @@ class _RegisterPageUiMiddleState extends State<RegisterPageUiMiddle> {
               child: BlocBuilder<RegisterCubit, RegisterState>(
                 buildWhen: (previous, current) => previous.authStrategy != current.authStrategy,
                 builder: (context, state) {
-                  return ToggleButtons(
-                    isSelected: AuthenticationStrategy.values
-                        .map((p) => p == state.authStrategy)
-                        .toList(),
+                  return AuthStrategyToggleButton(
+                    authStrategy: state.authStrategy,
                     onPressed: context.read<RegisterCubit>().onSetAuthenticationStrategy,
-                    children: AuthenticationStrategy.values
-                        .map(
-                          (v) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              v.label,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        )
-                        .toList(),
                   );
                 },
               ),

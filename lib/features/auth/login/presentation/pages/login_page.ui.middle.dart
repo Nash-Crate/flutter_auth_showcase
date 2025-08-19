@@ -46,22 +46,9 @@ class _LoginPageUiMiddleState extends State<LoginPageUiMiddle> {
               child: BlocBuilder<LoginCubit, LoginState>(
                 buildWhen: (previous, current) => previous.authStrategy != current.authStrategy,
                 builder: (context, state) {
-                  return ToggleButtons(
-                    isSelected: AuthenticationStrategy.values
-                        .map((p) => p == state.authStrategy)
-                        .toList(),
+                  return AuthStrategyToggleButton(
+                    authStrategy: state.authStrategy,
                     onPressed: context.read<LoginCubit>().onSetAuthenticationStrategy,
-                    children: AuthenticationStrategy.values
-                        .map(
-                          (v) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              v.label,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        )
-                        .toList(),
                   );
                 },
               ),

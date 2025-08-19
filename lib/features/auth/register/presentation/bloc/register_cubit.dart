@@ -71,11 +71,11 @@ class RegisterCubit extends Cubit<RegisterState> {
         case AuthenticationStrategy.superbase:
           res = await _registerWithEmailPasswordSuperbase(params);
         case AuthenticationStrategy.restApi:
-          // TODO: Handle this case.
-          throw UnimplementedError();
+          addError('Not yet implemented for REST API');
+          return;
         case AuthenticationStrategy.graphql:
-          // TODO: Handle this case.
-          throw UnimplementedError();
+          addError('Not yet implemented for GraphQL');
+          return;
       }
 
       if (res.isLeft()) addError(res.asL.message);
