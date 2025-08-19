@@ -124,10 +124,29 @@ Either<ValueFailure<String?>, String> validateEmailAddress(String? input) {
 }
 
 /// Validate password
-Either<ValueFailure<String?>, String> validatePassword(String? input) {
+Either<ValueFailure<String?>, String> validatePassword(
+  String? input, {
+  required String? confirmPassword,
+}) {
   if (input.isValidPassword) {
+    // only show passwordsDoNotMatch error if confirmPassword is provided
+    if (confirmPassword != null && input != confirmPassword) {
+      return Left(ValueFailure.passwordsDoNotMatch(failedValue: input));
+    }
     return Right(input!);
   } else {
     return Left(ValueFailure.invalidPassword(failedValue: input));
+  }
+}
+
+/// Validate confirm password
+Either<ValueFailure<String?>, String> validateConfirmPassword(
+  String? input, {
+  required String? password,
+}) {
+  if (input.isValidPassword && input == password) {
+    return Right(input!);
+  } else {
+    return Left(ValueFailure.passwordsDoNotMatch(failedValue: input));
   }
 }

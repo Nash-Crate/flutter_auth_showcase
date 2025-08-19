@@ -16,11 +16,22 @@ class EmailAddress extends ValueObject<String> {
 }
 
 class Password extends ValueObject<String> {
-  factory Password(String? input) {
-    return Password._(validatePassword(input));
+  factory Password(String? input, {String? confirmPassword}) {
+    return Password._(validatePassword(input, confirmPassword: confirmPassword));
   }
 
   const Password._(this.value);
+
+  @override
+  final Either<ValueFailure<String?>, String> value;
+}
+
+class ConfirmPassword extends ValueObject<String> {
+  factory ConfirmPassword(String? input, {required String? password}) {
+    return ConfirmPassword._(validateConfirmPassword(input, password: password));
+  }
+
+  const ConfirmPassword._(this.value);
 
   @override
   final Either<ValueFailure<String?>, String> value;

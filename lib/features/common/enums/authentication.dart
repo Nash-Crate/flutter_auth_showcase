@@ -1,19 +1,22 @@
 /// Authentication platform enum
-enum AuthenticationPlatform {
+enum AuthenticationStrategy {
   /// Firebase login
   firebase('Firebase'),
 
   /// Superbase login
-  superbase('Supabase'),
+  superbase('Supabase', hasImplemented: false),
 
   /// Rest API login
-  restApi('REST API'),
+  restApi('REST API', hasImplemented: false),
 
   /// GraphQL login
-  graphql('GraphQL');
+  graphql('GraphQL', hasImplemented: false);
 
-  const AuthenticationPlatform(this.label);
+  const AuthenticationStrategy(this.label, {this.hasImplemented = true});
 
   /// label for the login platform
   final String label;
+
+  /// Whether the authentication strategy is implemented
+  final bool hasImplemented;
 }

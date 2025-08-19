@@ -10,4 +10,7 @@ abstract class ValueFailure<T> with _$ValueFailure<T> {
 
   /// Password failures
   const factory ValueFailure.invalidPassword({required T failedValue}) = InvalidPassword;
+
+  /// Confirm password failures
+  const factory ValueFailure.passwordsDoNotMatch({required T failedValue}) = PasswordsDoNotMatch;
 }

@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDltKYSd3cY1A8Y_pKyVMcqC-FNC2_7BSU',
-    appId: '1:798992916814:android:41f6b844f2f4a3353f7e1f',
+    appId: '1:798992916814:android:91841b343a03dba83f7e1f',
     messagingSenderId: '798992916814',
     projectId: 'nashcrate-flutter-showcase',
     storageBucket: 'nashcrate-flutter-showcase.firebasestorage.app',
@@ -59,10 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCyhRVS8s5P5dXAq0iAYdW13-RGpSv2hNs',
-    appId: '1:798992916814:ios:d740b280d2e6ebdc3f7e1f',
+    appId: '1:798992916814:ios:3e746fcc6b2589783f7e1f',
     messagingSenderId: '798992916814',
     projectId: 'nashcrate-flutter-showcase',
     storageBucket: 'nashcrate-flutter-showcase.firebasestorage.app',
-    iosBundleId: 'com.nashcrate.flutterAuth',
+    iosClientId: '798992916814-qgrh9272ob7sag6gj7m8od0gm1vo0me6.apps.googleusercontent.com',
+    iosBundleId: 'com.nashcrate.flutterShowcase',
   );
+
 }

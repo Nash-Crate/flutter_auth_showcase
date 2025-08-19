@@ -10,7 +10,7 @@ abstract class LoginState with _$LoginState {
     @Default(false) bool isProcessing,
     Either<Failure, AuthUser>? result,
 
-    @Default(AuthenticationPlatform.firebase) AuthenticationPlatform authPlatform,
+    @Default(AuthenticationStrategy.firebase) AuthenticationStrategy authStrategy,
   }) = _LoginState;
 
   /// Initial state

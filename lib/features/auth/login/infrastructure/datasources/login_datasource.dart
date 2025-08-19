@@ -66,6 +66,13 @@ class LoginDatasourceImpl implements LoginDatasource {
       );
 
       return Right(authUser);
+    } on supabase.AuthException catch (e) {
+      if (e.code == 'invalid_credentials') {
+        return const Left(Failure('No user found for that email.'));
+      } else if (e.code == 'email_not_confirmed') {
+        return const Left(Failure('Email not confirmed.'));
+      }
+      return Left(Failure('An error occurred: ${e.message}'));
     } on Exception catch (e) {
       return Left(Failure('An error occurred: $e'));
     }
