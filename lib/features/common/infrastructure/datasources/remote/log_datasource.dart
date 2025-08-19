@@ -22,8 +22,7 @@ class LogRemoteDataSourceImpl implements LogRemoteDataSource {
         case LogType.login:
           await _logLogin(params.method, params.parameters);
         case LogType.register:
-          // TODO: Handle this case.
-          throw UnimplementedError();
+          await _logRegister(params.method, params.parameters);
         case LogType.generic:
           await FirebaseAnalytics.instance.logEvent(
             name: params.method.name,
@@ -48,8 +47,36 @@ class LogRemoteDataSourceImpl implements LogRemoteDataSource {
       case AuthenticationStrategy.firebase:
         await FirebaseAnalytics.instance.logLogin(loginMethod: method.name, parameters: parameters);
       case AuthenticationStrategy.superbase:
+        // TODO(superbase): Superbase feature is still in beta.
+        await FirebaseAnalytics.instance.logLogin(loginMethod: method.name, parameters: parameters);
+      case AuthenticationStrategy.restApi:
         // TODO: Handle this case.
         throw UnimplementedError();
+      case AuthenticationStrategy.graphql:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+    }
+  }
+
+  Future<void> _logRegister(LogMethod method, Map<String, Object>? parameters) async {
+    final strategy = await _configsDs.getAuthStrategy();
+
+    if (strategy.isLeft()) {
+      throw Exception('Failed to get authentication strategy');
+    }
+
+    switch (strategy.asR) {
+      case AuthenticationStrategy.firebase:
+        await FirebaseAnalytics.instance.logSignUp(
+          signUpMethod: method.name,
+          parameters: parameters,
+        );
+      case AuthenticationStrategy.superbase:
+        // TODO(superbase): Superbase feature is still in beta.
+        await FirebaseAnalytics.instance.logSignUp(
+          signUpMethod: method.name,
+          parameters: parameters,
+        );
       case AuthenticationStrategy.restApi:
         // TODO: Handle this case.
         throw UnimplementedError();

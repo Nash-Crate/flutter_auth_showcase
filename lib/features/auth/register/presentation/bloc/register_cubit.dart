@@ -1,28 +1,28 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_showcase/extensions/extensions.dart';
-import 'package:flutter_showcase/features/auth/login/login.dart';
+import 'package:flutter_showcase/features/auth/register/register.dart';
 import 'package:flutter_showcase/features/common/common.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-part 'login_cubit.freezed.dart';
-part 'login_state.dart';
+part 'register_cubit.freezed.dart';
+part 'register_state.dart';
 
-/// Login cubit
+/// Cubit for Register
 @injectable
-class LoginCubit extends Cubit<LoginState> {
+class RegisterCubit extends Cubit<RegisterState> {
   /// Constructor
-  LoginCubit(
+  RegisterCubit(
     this._setAuthStrategy,
-    this._loginWithEmailPasswordFirebase,
-    this._loginWithEmailPasswordSuperbase,
+    this._registerWithEmailPasswordFirebase,
+    this._registerWithEmailPasswordSuperbase,
     this._addNewLog,
-  ) : super(LoginState.initial());
+  ) : super(RegisterState.initial());
 
   final SetAuthStrategy _setAuthStrategy;
-  final LoginWithEmailPasswordFirebase _loginWithEmailPasswordFirebase;
-  final LoginWithEmailPasswordSuperbase _loginWithEmailPasswordSuperbase;
+  final RegisterWithEmailPasswordFirebase _registerWithEmailPasswordFirebase;
+  final RegisterWithEmailPasswordSuperbase _registerWithEmailPasswordSuperbase;
   final AddNewLog _addNewLog;
 
   /// on set authentication platform
@@ -44,7 +44,16 @@ class LoginCubit extends Cubit<LoginState> {
   void onSetEmail(String email) => emit(state.copyWith(email: EmailAddress(email)));
 
   /// on set password
-  void onSetPassword(String password) => emit(state.copyWith(password: Password(password)));
+  void onSetPassword(String password) => emit(
+    state.copyWith(password: Password(password, confirmPassword: state.confirmPassword.getOrNull)),
+  );
+
+  /// on set confirm password
+  void onSetConfirmPassword(String confirmPassword) => emit(
+    state.copyWith(
+      confirmPassword: ConfirmPassword(confirmPassword, password: state.password.getOrNull),
+    ),
+  );
 
   /// on submit
   Future<void> onSubmit() async {
@@ -52,15 +61,15 @@ class LoginCubit extends Cubit<LoginState> {
 
     // only proceed if both email and password are valid
     if (state.email.isValid && state.password.isValid) {
-      final params = LoginWithEmailPasswordParams(email: state.email, password: state.password);
+      final params = RegisterWithEmailPasswordParams(email: state.email, password: state.password);
 
-      late final Either<Failure, AuthUser> res;
+      late final Either<Failure, Unit> res;
 
       switch (state.authStrategy) {
         case AuthenticationStrategy.firebase:
-          res = await _loginWithEmailPasswordFirebase(params);
+          res = await _registerWithEmailPasswordFirebase(params);
         case AuthenticationStrategy.superbase:
-          res = await _loginWithEmailPasswordSuperbase(params);
+          res = await _registerWithEmailPasswordSuperbase(params);
         case AuthenticationStrategy.restApi:
           // TODO: Handle this case.
           throw UnimplementedError();
@@ -73,15 +82,15 @@ class LoginCubit extends Cubit<LoginState> {
 
       // log the result
       final logParams = NewLogParams(
-        type: LogType.login,
-        method: LogMethod.loginWithEmailPassword,
+        type: LogType.register,
+        method: LogMethod.registerWithEmailPassword,
         parameters: {
           'email': state.email.getOrCrash,
           'authStrategy': state.authStrategy.label,
         },
         message: res.fold(
-          (l) => 'Login failed: ${l.message}',
-          (r) => 'Login successful for user: ${r.email}',
+          (l) => 'Registration failed: ${l.message}',
+          (r) => 'Registration is successful for user: ${state.email.getOrCrash}',
         ),
       );
       await _addNewLog(logParams);

@@ -51,6 +51,6 @@ app.*.map.json
 *.mocks.dart
 *.graphql.dart
 
-/config
+*config.json
 /coverage/
 /devtools_options.yaml
