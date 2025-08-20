@@ -9,7 +9,6 @@ abstract class AuthUser with _$AuthUser {
   const factory AuthUser({
     required String id,
     required String email,
-    required String token,
-    required String? refreshToken,
+    required String name,
   }) = _AuthUser;
 }

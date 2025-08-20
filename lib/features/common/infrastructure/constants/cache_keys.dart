@@ -6,6 +6,9 @@ enum CacheKeys {
   /// User token
   token,
 
+  /// User refresh token
+  refreshToken,
+
   /// Last email address which used to login successfully
   lastEmail,
 

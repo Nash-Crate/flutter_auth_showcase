@@ -13,12 +13,13 @@ part 'home_state.dart';
 @injectable
 class HomeCubit extends Cubit<HomeState> {
   /// Constructor
-  HomeCubit(this._addNewLog, this._getPosts) : super(HomeState.initial()) {
+  HomeCubit(this._addNewLog, this._getPosts, this._signOutUser) : super(HomeState.initial()) {
     init();
   }
 
   final GetPosts _getPosts;
   final AddNewLog _addNewLog;
+  final SignOutUser _signOutUser;
 
   /// Initialize home functions
   Future<void> init() async {
@@ -51,11 +52,11 @@ class HomeCubit extends Cubit<HomeState> {
     );
     await _addNewLog(logParams);
 
-    await Future<void>.delayed(const Duration(seconds: 1));
-    const Either<Failure, Unit> result = Right(unit);
+    final res = await _signOutUser();
+    if (res.isLeft()) addError(res.asL);
 
     // leave the processing state as true to show the loading indicator
-    emit(state.copyWith(logoutResult: result));
+    emit(state.copyWith(logoutResult: res));
   }
 
   /// Method to get new posts

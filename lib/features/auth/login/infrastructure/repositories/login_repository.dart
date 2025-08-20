@@ -7,17 +7,17 @@ import 'package:injectable/injectable.dart';
 @Singleton(as: ILoginRepository)
 class LoginRepository implements ILoginRepository {
   /// Constructor for LoginRepository
-  const LoginRepository(this._loginDatasource);
+  const LoginRepository(this._remoteDatasource);
 
-  final LoginDatasource _loginDatasource;
+  final LoginRemoteDatasource _remoteDatasource;
 
   @override
   AsyncFailT<AuthUser> loginWithEmailPasswordFirebase(LoginWithEmailPasswordParams params) {
-    return _loginDatasource.loginWithEmailPasswordFirebase(params);
+    return _remoteDatasource.loginWithEmailPasswordFirebase(params);
   }
 
   @override
   AsyncFailT<AuthUser> loginWithEmailPasswordSuperbase(LoginWithEmailPasswordParams params) {
-    return _loginDatasource.loginWithEmailPasswordSuperbase(params);
+    return _remoteDatasource.loginWithEmailPasswordSuperbase(params);
   }
 }

@@ -6,13 +6,13 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 /// Abstraction for the Login Data Source.
-abstract class LoginDatasource with ILoginRepository {}
+abstract class LoginRemoteDatasource with ILoginRepository {}
 
 /// Implementation of the Login Data Source.
-@Singleton(as: LoginDatasource)
-class LoginDatasourceImpl implements LoginDatasource {
+@Singleton(as: LoginRemoteDatasource)
+class LoginRemoteDatasourceImpl implements LoginRemoteDatasource {
   /// Constructor
-  const LoginDatasourceImpl(this._firebaseAuth);
+  const LoginRemoteDatasourceImpl(this._firebaseAuth);
 
   final firebase_auth.FirebaseAuth _firebaseAuth;
 
@@ -32,8 +32,7 @@ class LoginDatasourceImpl implements LoginDatasource {
       final authUser = AuthUser(
         id: user.uid,
         email: user.email ?? '',
-        token: user.refreshToken ?? '',
-        refreshToken: user.refreshToken ?? '',
+        name: user.displayName ?? '',
       );
 
       return Right(authUser);
@@ -66,8 +65,9 @@ class LoginDatasourceImpl implements LoginDatasource {
       final authUser = AuthUser(
         id: user.id,
         email: user.email ?? '',
-        token: session.accessToken,
-        refreshToken: session.refreshToken ?? '',
+        name: '',
+        // token: session.accessToken,
+        // refreshToken: session.refreshToken ?? '',
       );
 
       return Right(authUser);
