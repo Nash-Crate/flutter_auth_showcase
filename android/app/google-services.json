@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:798992916814:android:41f6b844f2f4a3353f7e1f",
+        "mobilesdk_app_id": "1:798992916814:android:91841b343a03dba83f7e1f",
         "android_client_info": {
           "package_name": "com.nashcrate.flutter_showcase"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "798992916814-3l294rkfnfikg1vo1l81dfegeapogkd1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDltKYSd3cY1A8Y_pKyVMcqC-FNC2_7BSU"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "798992916814-3l294rkfnfikg1vo1l81dfegeapogkd1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "798992916814-0hlfr8cp7g8j2ldduk662kbu8qgka1r5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nashcrate.flutterAuth"
+              }
+            }
+          ]
         }
       }
     }

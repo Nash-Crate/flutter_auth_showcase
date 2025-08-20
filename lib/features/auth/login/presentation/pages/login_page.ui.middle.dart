@@ -44,24 +44,11 @@ class _LoginPageUiMiddleState extends State<LoginPageUiMiddle> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: BlocBuilder<LoginCubit, LoginState>(
-                buildWhen: (previous, current) => previous.authPlatform != current.authPlatform,
+                buildWhen: (previous, current) => previous.authStrategy != current.authStrategy,
                 builder: (context, state) {
-                  return ToggleButtons(
-                    isSelected: AuthenticationPlatform.values
-                        .map((p) => p == state.authPlatform)
-                        .toList(),
-                    onPressed: context.read<LoginCubit>().onSetAuthenticationPlatform,
-                    children: AuthenticationPlatform.values
-                        .map(
-                          (v) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              v.label,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        )
-                        .toList(),
+                  return AuthStrategyToggleButton(
+                    authStrategy: state.authStrategy,
+                    onPressed: context.read<LoginCubit>().onSetAuthenticationStrategy,
                   );
                 },
               ),
@@ -102,8 +89,8 @@ class _LoginPageUiMiddleState extends State<LoginPageUiMiddle> {
 
             const SizedBox(height: 10),
 
-            BlocSelector<LoginCubit, LoginState, AuthenticationPlatform>(
-              selector: (state) => state.authPlatform,
+            BlocSelector<LoginCubit, LoginState, AuthenticationStrategy>(
+              selector: (state) => state.authStrategy,
               builder: (context, authPlatform) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,

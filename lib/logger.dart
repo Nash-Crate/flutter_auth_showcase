@@ -4,23 +4,12 @@ import 'package:logger/logger.dart';
 /// flag to check if the app is running in test mode
 const kTestMode = bool.fromEnvironment('kTestMode');
 
-/// Logger
-final logger = Logger(
-  level:
-      kTestMode
-          ? Level.error
-          : kDebugMode
-          ? Level.debug
-          : Level.error,
-);
-
 /// Logger without stack
-final loggerNoStack = Logger(
-  level:
-      kTestMode
-          ? Level.error
-          : kDebugMode
-          ? Level.debug
-          : Level.error,
+final logger = Logger(
+  level: kTestMode
+      ? Level.error
+      : kDebugMode
+      ? Level.debug
+      : Level.error,
   printer: PrettyPrinter(methodCount: 0, lineLength: 100),
 );

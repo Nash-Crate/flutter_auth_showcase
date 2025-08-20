@@ -6,6 +6,8 @@ abstract class HomeState with _$HomeState {
   /// constructor
   const factory HomeState({
     @Default(true) bool processing,
+
+    Either<Failure, List<Post>>? posts,
     Either<Failure, Unit>? logoutResult,
   }) = _HomeState;
 
