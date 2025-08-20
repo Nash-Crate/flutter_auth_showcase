@@ -10,7 +10,7 @@ class PostPage extends StatelessWidget {
   static String path = 'post-details';
 
   /// Push path '/home/post-details'
-  static String pushPath = '${HomePage.path}/$path';
+  static String pushPath = '${PostsPage.path}/$path';
 
   @override
   Widget build(BuildContext context) {

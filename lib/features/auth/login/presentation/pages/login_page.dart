@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
   void onLoginStateChanged(BuildContext context, LoginState state) {
     if (state.user != null) {
       context.read<AuthenticationCubit>().setAuthenticated(state.user!);
-      context.pushReplacement(HomePage.path);
+      context.pushReplacement(PostsPage.pushPath);
     }
   }
 

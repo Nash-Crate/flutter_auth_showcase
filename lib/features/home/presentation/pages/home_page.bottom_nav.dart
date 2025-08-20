@@ -20,6 +20,14 @@ class HomePageBottomNavigationBar extends StatelessWidget {
           tooltip: 'Profile',
         ),
       ],
+      onTap: (index) {
+        switch (index) {
+          case 0:
+            context.push(PostsPage.pushPath);
+          case 1:
+            context.push(UserProfilePage.pushPath);
+        }
+      },
     );
   }
 }

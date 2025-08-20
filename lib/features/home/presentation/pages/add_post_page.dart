@@ -20,8 +20,8 @@ class AddPostPage extends StatelessWidget {
   /// Router path 'add-post'
   static String path = 'add-post';
 
-  /// Push path '/home/add-post'
-  static String pushPath = '${HomePage.path}/$path';
+  /// Push path '/posts/add-post'
+  static String pushPath = '${PostsPage.path}/$path';
 
   @override
   Widget build(BuildContext context) {

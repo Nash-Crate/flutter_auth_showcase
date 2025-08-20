@@ -1,31 +1,38 @@
-part of 'home_page.dart';
+part of 'posts_page.dart';
 
-/// Home page middle section
-class HomePageUiMiddle extends StatelessWidget {
+/// Posts page middle section
+class PostsPageUiMiddle extends StatelessWidget {
   /// Constructor
-  const HomePageUiMiddle({super.key});
+  const PostsPageUiMiddle({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<HomeCubit, HomeState, List<Post>?>(
-      selector: (state) => state.posts != null
-          ? state.posts!.isRight()
-                ? state.posts!.asR
-                : null
-          : null,
-      builder: (context, posts) {
-        if (posts == null) {
+    return BlocSelector<HomeCubit, HomeState, Either<Failure, List<Post>>?>(
+      selector: (state) => state.posts,
+      builder: (context, postsEither) {
+        if (postsEither == null) {
           return const Center(child: CircularProgressIndicator());
-        } else if (posts.isEmpty) {
+        } else if (postsEither.isLeft()) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                postsEither.asL.message,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.red),
+              ),
+            ),
+          );
+        } else if (postsEither.asR.isEmpty) {
           return Center(
             child: Text('No posts available', style: Theme.of(context).textTheme.bodySmall),
           );
         }
 
         return ListView.builder(
-          itemCount: posts.length,
+          itemCount: postsEither.asR.length,
           itemBuilder: (context, index) {
-            final post = posts[index];
+            final post = postsEither.asR[index];
 
             return Card(
               child: Column(

@@ -1,9 +1,9 @@
-part of 'home_page.dart';
+part of 'posts_page.dart';
 
-/// Home page app bar
-class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
+/// Posts page app bar
+class PostsPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Constructor
-  const HomePageAppBar({super.key});
+  const PostsPageAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

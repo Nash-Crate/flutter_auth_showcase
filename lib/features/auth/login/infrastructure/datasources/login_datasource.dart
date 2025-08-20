@@ -11,13 +11,18 @@ abstract class LoginDatasource with ILoginRepository {}
 /// Implementation of the Login Data Source.
 @Singleton(as: LoginDatasource)
 class LoginDatasourceImpl implements LoginDatasource {
+  /// Constructor
+  const LoginDatasourceImpl(this._firebaseAuth);
+
+  final firebase_auth.FirebaseAuth _firebaseAuth;
+
   @override
   AsyncFailT<AuthUser> loginWithEmailPasswordFirebase(LoginWithEmailPasswordParams params) async {
     try {
       // Sign out any existing user before signing in
-      await firebase_auth.FirebaseAuth.instance.signOut();
+      await _firebaseAuth.signOut();
 
-      final res = await firebase_auth.FirebaseAuth.instance.signInWithEmailAndPassword(
+      final res = await _firebaseAuth.signInWithEmailAndPassword(
         email: params.email.getOrCrash,
         password: params.password.getOrCrash,
       );

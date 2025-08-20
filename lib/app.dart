@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_showcase/features/common/common.dart';
+import 'package:flutter_showcase/features/in_app_purchase/in_app_purchase.dart';
 import 'package:flutter_showcase/injection.dart';
 import 'package:flutter_showcase/routing/router.dart';
 import 'package:flutter_showcase/theme/theme.dart';
@@ -17,8 +18,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AuthenticationCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<AuthenticationCubit>()),
+        BlocProvider(create: (context) => getIt<InAppPurchaseCubit>(), lazy: false),
+      ],
       child: Builder(
         builder: (context) {
           return MaterialApp.router(

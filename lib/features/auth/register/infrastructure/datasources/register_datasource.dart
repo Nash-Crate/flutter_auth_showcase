@@ -11,15 +11,20 @@ abstract class RegisterDatasource with IRegisterRepository {}
 /// Implementation of the Register Data Source.
 @Singleton(as: RegisterDatasource)
 class RegisterDatasourceImpl implements RegisterDatasource {
+  /// Constructor
+  const RegisterDatasourceImpl(this._firebaseAuth);
+
+  final firebase_auth.FirebaseAuth _firebaseAuth;
+
   @override
   AsyncFailT<Unit> registerWithEmailPasswordFirebase(
     RegisterWithEmailPasswordParams params,
   ) async {
     try {
       // Sign out any existing user before signing in
-      await firebase_auth.FirebaseAuth.instance.signOut();
+      await _firebaseAuth.signOut();
 
-      await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
         email: params.email.getOrCrash,
         password: params.password.getOrCrash,
       );

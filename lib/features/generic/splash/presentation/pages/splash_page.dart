@@ -25,7 +25,7 @@ class SplashPage extends StatelessWidget {
       final splashState = context.read<SplashCubit>().state;
       if (splashState.isAuthenticated) {
         context.read<AuthenticationCubit>().setAuthenticated(splashState.user!);
-        context.pushReplacement(HomePage.path);
+        context.pushReplacement(HomePage.pushPath);
         return;
       }
 

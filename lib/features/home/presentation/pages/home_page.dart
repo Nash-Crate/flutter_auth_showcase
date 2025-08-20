@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_showcase/extensions/extensions.dart';
-import 'package:flutter_showcase/features/auth/login/login.dart';
-import 'package:flutter_showcase/features/common/common.dart';
-import 'package:flutter_showcase/features/home/core/core.dart';
 import 'package:flutter_showcase/features/home/home.dart';
 import 'package:flutter_showcase/injection.dart';
 import 'package:go_router/go_router.dart';
 
-part 'home_page.app_bar.dart';
 part 'home_page.bottom_nav.dart';
-part 'home_page.fab.dart';
-part 'home_page.ui.middle.dart';
 
 /// Home page widget
 class HomePage extends StatelessWidget {
   /// Constructor
-  const HomePage({super.key});
+  const HomePage(this.body, {super.key});
 
-  /// Router path '/home'
-  static String path = '/home';
+  /// Content body
+  final Widget body;
+
+  /// Push path '/home/posts'
+  static String pushPath = PostsPage.pushPath;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +25,9 @@ class HomePage extends StatelessWidget {
         builder: (context) {
           return Stack(
             children: [
-              const Scaffold(
-                appBar: HomePageAppBar(),
-                body: HomePageUiMiddle(),
-                bottomNavigationBar: HomePageBottomNavigationBar(),
-                floatingActionButton: HomePageFab(),
+              Scaffold(
+                body: body,
+                bottomNavigationBar: const HomePageBottomNavigationBar(),
               ),
 
               BlocSelector<HomeCubit, HomeState, bool>(

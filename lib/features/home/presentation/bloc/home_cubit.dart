@@ -28,10 +28,11 @@ class HomeCubit extends Cubit<HomeState> {
     final res = await _getPosts(getPostParams);
     if (res.isLeft()) {
       addError(res.asL);
+      emit(state.copyWith(processing: false, posts: Left(res.asL)));
+      return;
     }
-    emit(state.copyWith(posts: Right(res.asR), processing: false));
 
-    emit(state.copyWith(processing: false));
+    emit(state.copyWith(posts: Right(res.asR), processing: false));
   }
 
   /// Method to handle user logout
