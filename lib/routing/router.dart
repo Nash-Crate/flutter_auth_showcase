@@ -6,6 +6,7 @@ import 'package:flutter_showcase/features/auth/register/register.dart';
 import 'package:flutter_showcase/features/common/common.dart';
 import 'package:flutter_showcase/features/generic/splash/splash.dart';
 import 'package:flutter_showcase/features/home/home.dart';
+import 'package:flutter_showcase/features/profile/profile.dart';
 import 'package:flutter_showcase/injection.dart';
 import 'package:flutter_showcase/logger.dart';
 import 'package:go_router/go_router.dart';
@@ -40,10 +41,12 @@ final appRouter = GoRouter(
       routes: [
         GoRoute(
           path: PostsPage.path,
+          name: 'Posts',
           builder: (context, state) => const PostsPage(),
           routes: [
             GoRoute(
               path: AddPostPage.path,
+              name: 'Add Post',
               builder: (context, state) {
                 return const AddPostPage();
               },
@@ -52,6 +55,7 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: UserProfilePage.path,
+          name: 'Profile',
           builder: (context, state) => const UserProfilePage(),
         ),
       ],

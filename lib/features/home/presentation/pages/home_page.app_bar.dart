@@ -1,9 +1,9 @@
 part of 'posts_page.dart';
 
-/// Posts page app bar
-class PostsPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+/// Home page app bar
+class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Constructor
-  const PostsPageAppBar({super.key});
+  const HomePageAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,14 @@ class PostsPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       },
       child: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Welcome'),
+        title: Builder(
+          builder: (context) {
+            final routerState = GoRouter.of(context).state;
+
+            final title = routerState.name ?? 'Flutter Showcase';
+            return Text(title);
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),

@@ -20,7 +20,9 @@ class HomePageBottomNavigationBar extends StatelessWidget {
           tooltip: 'Profile',
         ),
       ],
+      currentIndex: GoRouter.of(context).state.path == PostsPage.path ? 0 : 1,
       onTap: (index) {
+        if ((GoRouter.of(context).state.path == PostsPage.path ? 0 : 1) == index) return;
         switch (index) {
           case 0:
             context.push(PostsPage.pushPath);

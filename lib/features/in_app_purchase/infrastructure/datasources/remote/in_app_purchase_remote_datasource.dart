@@ -6,18 +6,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:injectable/injectable.dart';
 
-/// Interface for the InAppPurchase repository.
-mixin IInAppPurchaseRepository {
-  /// listen to the purchase updates stream
-  Stream<Either<Failure, List<String>>> purchaseUpdates();
-
-  /// get the list of products available for purchase
-  Future<Either<Failure, List<PurchasableProduct>>> getAvailableProducts();
-
-  /// purchase a product from a product id
-  Future<Either<Failure, Unit>> purchaseProduct(String productId);
-}
-
 /// Interface for the InAppPurchase remote data source.
 abstract class InAppPurchaseRemoteDataSource with IInAppPurchaseRepository {}
 

@@ -5,4 +5,3 @@ export './pages/add_post_page.dart';
 export './pages/home_page.dart';
 export './pages/post_page.dart';
 export './pages/posts_page.dart';
-export './pages/user_profile_page.dart';

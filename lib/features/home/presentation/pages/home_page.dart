@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_showcase/features/home/home.dart';
+import 'package:flutter_showcase/features/profile/profile.dart';
 import 'package:flutter_showcase/injection.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,6 +27,7 @@ class HomePage extends StatelessWidget {
           return Stack(
             children: [
               Scaffold(
+                appBar: const HomePageAppBar(),
                 body: body,
                 bottomNavigationBar: const HomePageBottomNavigationBar(),
               ),

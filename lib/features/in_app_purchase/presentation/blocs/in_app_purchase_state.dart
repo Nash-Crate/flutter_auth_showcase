@@ -1,8 +1,31 @@
-part of '../../../in_app_purchase/presentation/blocs/in_app_purchase_cubit.dart';
+part of 'in_app_purchase_cubit.dart';
+
+/// Import necessary packages
+enum InAppPurchaseStatus {
+  /// idle state
+  idle,
+
+  /// processing state
+  processing,
+
+  /// success state
+  success,
+
+  /// error state
+  error,
+}
 
 /// State for managing in-app purchases
 @freezed
-class InAppPurchaseState with _$InAppPurchaseState {
-  /// Initial state of the in-app purchase
-  const factory InAppPurchaseState.initial() = _Initial;
+abstract class InAppPurchaseState with _$InAppPurchaseState {
+  /// constructor
+  const factory InAppPurchaseState({
+    @Default(InAppPurchaseStatus.idle) InAppPurchaseStatus status,
+    Either<Failure, Unit>? result,
+  }) = _InAppPurchaseState;
+
+  /// Initial state
+  factory InAppPurchaseState.initial() => const InAppPurchaseState();
+
+  const InAppPurchaseState._();
 }
