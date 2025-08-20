@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -6,6 +9,12 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
@@ -33,11 +42,50 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            val env = System.getenv()
+
+            when {
+                // Production
+                env["ANDROID_KEYSTORE_PATH"] != null -> {
+                    storeFile = env["ANDROID_KEYSTORE_PATH"]?.let { file(it) }
+                    keyAlias = env["ANDROID_KEYSTORE_ALIAS"]
+                    keyPassword = env["ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD"]
+                    storePassword = env["ANDROID_KEYSTORE_PASSWORD"]
+                }
+
+                // Staging
+                env["STG_ANDROID_KEYSTORE_PATH"] != null -> {
+                    storeFile =
+                        env["STG_ANDROID_KEYSTORE_PATH"]?.let { file(it) }
+                    keyAlias = env["STG_ANDROID_KEYSTORE_ALIAS"]
+                    keyPassword =
+                        env["STG_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD"]
+                    storePassword = env["STG_ANDROID_KEYSTORE_PASSWORD"]
+                }
+
+                // Development
+                else -> {
+                    keyAlias = keystoreProperties["keyAlias"] as String
+                    keyPassword = keystoreProperties["keyPassword"] as String
+                    storeFile =
+                        keystoreProperties["storeFile"]?.let { file(it) }
+                    storePassword =
+                        keystoreProperties["storePassword"] as String
+                }
+            }
+        }
+    }
+
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+        getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
+        }
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            proguardFiles += getDefaultProguardFile("proguard-android.txt")
         }
     }
 }
