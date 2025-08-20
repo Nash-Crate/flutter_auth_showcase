@@ -22,9 +22,11 @@ dependencies:
   injectable: ^2.5.1
 
   # firebase
-  firebase_core: ^4.0.0
-  firebase_auth: ^6.0.0
+  cloud_firestore: ^6.0.0
   firebase_analytics: ^12.0.0
+  firebase_auth: ^6.0.1
+  firebase_core: ^4.0.0
+  firebase_storage: ^13.0.0
 
   # functional
   fpdart: ^1.1.1
@@ -41,7 +43,7 @@ dependencies:
   internet_connection_checker_plus: ^2.7.2
 
   # routing
-  go_router: ^16.1.0
+  go_router: ^16.2.0
 
   # state management
   flutter_bloc: ^9.1.1
@@ -51,13 +53,16 @@ dependencies:
 
   # UI components
   bot_toast: ^4.1.3
+  video_player: ^2.10.0
 
   # utils
   collection: ^1.19.1
   google_fonts: ^6.3.0
+  file_picker: ^10.3.1
   freezed_annotation: ^3.1.0
+  image_picker: ^1.2.0
   logger: ^2.6.1
-  package_info_plus: ^8.3.0
+  package_info_plus: ^8.3.1
   supabase_flutter: ^2.9.1
 
 dev_dependencies:
@@ -65,7 +70,7 @@ dev_dependencies:
   very_good_analysis: ^9.0.0
 
   # generators
-  build_runner: ^2.6.1
+  build_runner: ^2.7.0
   flutter_launcher_icons: ^0.14.4
   freezed: ^3.2.0
   injectable_generator: ^2.8.1

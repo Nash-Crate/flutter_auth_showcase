@@ -36,18 +36,28 @@ final appRouter = GoRouter(
       builder: (context, state) {
         return const HomePage();
       },
-      // routes: [
-      //   GoRoute(
-      //     path: 'details',
-      //     builder: (context, state) {
-      //       return DetailsScreen();
-      //     },
-      //   ),
-      // ],
+      routes: [
+        GoRoute(
+          path: PostPage.path,
+          builder: (context, state) {
+            return const PostPage();
+          },
+        ),
+        GoRoute(
+          path: AddPostPage.path,
+          builder: (context, state) {
+            return const AddPostPage();
+          },
+        ),
+      ],
     ),
   ],
   errorBuilder: (context, state) {
     logger.e(state.error);
-    return Scaffold(body: Center(child: Text(state.error.toString())));
+    return Scaffold(
+      body: Center(
+        child: Text(state.error.toString(), style: const TextStyle(color: Colors.red)),
+      ),
+    );
   },
 );

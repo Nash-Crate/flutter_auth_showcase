@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_showcase/extensions/extensions.dart';
 import 'package:flutter_showcase/features/auth/login/login.dart';
+import 'package:flutter_showcase/features/common/common.dart';
+import 'package:flutter_showcase/features/home/core/core.dart';
 import 'package:flutter_showcase/features/home/home.dart';
 import 'package:flutter_showcase/injection.dart';
 import 'package:go_router/go_router.dart';
 
 part 'home_page.app_bar.dart';
 part 'home_page.bottom_nav.dart';
+part 'home_page.fab.dart';
 part 'home_page.ui.middle.dart';
 
 /// Home page widget
@@ -29,6 +33,7 @@ class HomePage extends StatelessWidget {
                 appBar: HomePageAppBar(),
                 body: HomePageUiMiddle(),
                 bottomNavigationBar: HomePageBottomNavigationBar(),
+                floatingActionButton: HomePageFab(),
               ),
 
               BlocSelector<HomeCubit, HomeState, bool>(
