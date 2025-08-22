@@ -1,5 +1,4 @@
 import 'package:flutter_showcase/features/common/common.dart';
-import 'package:flutter_showcase/features/generic/splash/splash.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 

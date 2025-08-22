@@ -62,10 +62,10 @@ class LoginCubit extends Cubit<LoginState> {
         case AuthenticationStrategy.superbase:
           res = await _loginWithEmailPasswordSuperbase(params);
         case AuthenticationStrategy.restApi:
-          // TODO: Handle this case.
+          // TODO(nextPhase): Handle this case.
           throw UnimplementedError();
         case AuthenticationStrategy.graphql:
-          // TODO: Handle this case.
+          // TODO(nextPhase): Handle this case.
           throw UnimplementedError();
       }
 

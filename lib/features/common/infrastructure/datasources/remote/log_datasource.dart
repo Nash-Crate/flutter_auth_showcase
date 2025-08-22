@@ -47,13 +47,13 @@ class LogRemoteDataSourceImpl implements LogRemoteDataSource {
       case AuthenticationStrategy.firebase:
         await FirebaseAnalytics.instance.logLogin(loginMethod: method.name, parameters: parameters);
       case AuthenticationStrategy.superbase:
-        // TODO(superbase): Superbase feature is still in beta.
+        // TODO(nextPhase): Superbase feature is still in beta.
         await FirebaseAnalytics.instance.logLogin(loginMethod: method.name, parameters: parameters);
       case AuthenticationStrategy.restApi:
-        // TODO: Handle this case.
+        // TODO(nextPhase): Handle this case.
         throw UnimplementedError();
       case AuthenticationStrategy.graphql:
-        // TODO: Handle this case.
+        // TODO(nextPhase): Handle this case.
         throw UnimplementedError();
     }
   }
@@ -78,10 +78,10 @@ class LogRemoteDataSourceImpl implements LogRemoteDataSource {
           parameters: parameters,
         );
       case AuthenticationStrategy.restApi:
-        // TODO: Handle this case.
+        // TODO(nextPhase): Handle this case.
         throw UnimplementedError();
       case AuthenticationStrategy.graphql:
-        // TODO: Handle this case.
+        // TODO(nextPhase): Handle this case.
         throw UnimplementedError();
     }
   }
