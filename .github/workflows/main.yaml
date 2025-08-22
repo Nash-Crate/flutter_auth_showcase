@@ -52,8 +52,8 @@ jobs:
           dart run build_runner clean
           dart run build_runner build -d
 
-      - name: Generate translations
-        run: dart run slang
+#      - name: Generate translations
+#        run: dart run slang
 
       - name: Analyze code
         run: flutter analyze
@@ -126,8 +126,8 @@ jobs:
           flutter packages pub run build_runner clean
           flutter packages pub run build_runner build --delete-conflicting-outputs
 
-      - name: Generate translations
-        run: flutter pub run slang
+#      - name: Generate translations
+#        run: flutter pub run slang
 
       # Version Management
       - name: Get version from pubspec.yaml
