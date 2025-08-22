@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -77,6 +78,26 @@ android {
             }
         }
     }
+
+//    applicationVariants.all {
+//        outputs.all {
+//            val appName = "flutter_showcase"
+//            val buildTypeName = buildType.name
+//            val ext =
+//                if ((this as BaseVariantOutputImpl).outputFileName.endsWith(".apk")) {
+//                    ".apk"
+//                } else {
+//                    ".aab"
+//                }
+//
+//            val newName = if (buildTypeName == "debug") {
+//                "app-${flavorName}-debug${ext}"
+//            } else {
+//                "${appName}_${flavorName}_${defaultConfig.versionName}+${defaultConfig.versionCode}${ext}"
+//            }
+//            this.outputFileName = newName
+//        }
+//    }
 
     buildTypes {
         getByName("debug") {
