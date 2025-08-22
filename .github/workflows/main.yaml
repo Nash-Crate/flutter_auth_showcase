@@ -170,7 +170,7 @@ jobs:
     name: Create GitHub Release
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
 
     steps:
       - name: Checkout code
@@ -230,7 +230,7 @@ jobs:
     name: Deploy to Google Play
     needs: [build, release]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && success()
+    if: github.ref == 'refs/heads/main' && success() || github.ref == 'refs/heads/staging' && success()
 
     steps:
       - name: Checkout code
@@ -259,7 +259,7 @@ jobs:
     name: Notify Teams
     needs: [build, release, deploy_android]
     runs-on: ubuntu-latest
-    if: always() && github.ref == 'refs/heads/main'
+    if: always() && github.ref == 'refs/heads/main' || always() && github.ref == 'refs/heads/staging'
 
     steps:
       - name: Notify Success
