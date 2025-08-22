@@ -18,8 +18,16 @@ on:
           - minor
           - major
 
+# Add permissions for the GITHUB_TOKEN
+permissions:
+  contents: write
+  packages: write
+  actions: read
+  checks: write
+  pull-requests: write
+  
 env:
-  FLUTTER_VERSION: '3.32.x'
+  FLUTTER_VERSION: '3.x'
   JAVA_VERSION: '17'
 
 jobs:
@@ -50,10 +58,10 @@ jobs:
       - name: Run code generation
         run: |
           dart run build_runner clean
-          dart run build_runner build -d
+          dart run build_runner build --delete-conflicting-outputs
 
-#      - name: Generate translations
-#        run: dart run slang
+      # - name: Generate translations
+      #   run: dart run slang
 
       - name: Analyze code
         run: flutter analyze
@@ -74,6 +82,8 @@ jobs:
 
     outputs:
       version: ${{ steps.version.outputs.version }}
+      apk_name: ${{ steps.build_paths.outputs.apk_name }}
+      aab_name: ${{ steps.build_paths.outputs.aab_name }}
       apk_path: ${{ steps.build_paths.outputs.apk_path }}
       aab_path: ${{ steps.build_paths.outputs.aab_path }}
 
@@ -123,11 +133,11 @@ jobs:
 
       - name: Run code generation
         run: |
-          flutter packages pub run build_runner clean
-          flutter packages pub run build_runner build --delete-conflicting-outputs
+          dart run build_runner clean
+          dart run build_runner build --delete-conflicting-outputs
 
-#      - name: Generate translations
-#        run: flutter pub run slang
+      # - name: Generate translations
+      #   run: dart run slang
 
       # Version Management
       - name: Get version from pubspec.yaml
@@ -139,32 +149,45 @@ jobs:
 
       # Build Android
       - name: Build Android APK
-        run: flutter build apk --release
+        run: flutter build apk --release --build-number=${{ github.run_number }}
 
       - name: Build Android AAB
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --build-number=${{ github.run_number }}
 
       # Set build paths for other jobs
       - name: Set build paths
         id: build_paths
         run: |
-          echo "apk_path=build/app/outputs/flutter-apk/app-release.apk" >> $GITHUB_OUTPUT
-          echo "aab_path=build/app/outputs/bundle/release/app-release.aab" >> $GITHUB_OUTPUT
+          APK_NAME="app-release-${{ steps.version.outputs.version }}-${{ github.ref_name }}.apk"
+          AAB_NAME="app-release-${{ steps.version.outputs.version }}-${{ github.ref_name }}.aab"
+          
+          # Copy and rename files with version and branch
+          cp build/app/outputs/flutter-apk/app-release.apk "./artifacts/$APK_NAME"
+          cp build/app/outputs/bundle/release/app-release.aab "./artifacts/$AAB_NAME"
+          
+          echo "apk_name=$APK_NAME" >> $GITHUB_OUTPUT
+          echo "aab_name=$AAB_NAME" >> $GITHUB_OUTPUT
+          echo "apk_path=./artifacts/$APK_NAME" >> $GITHUB_OUTPUT
+          echo "aab_path=./artifacts/$AAB_NAME" >> $GITHUB_OUTPUT
+
+      # Create artifacts directory
+      - name: Create artifacts directory
+        run: mkdir -p ./artifacts
 
       # Upload artifacts for other jobs
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk-${{ steps.version.outputs.version }}
+          name: android-apk-${{ steps.version.outputs.version }}-${{ github.ref_name }}
           path: ${{ steps.build_paths.outputs.apk_path }}
-#          retention-days: 30
+          retention-days: 30
 
       - name: Upload Android AAB
         uses: actions/upload-artifact@v4
         with:
-          name: android-aab-${{ steps.version.outputs.version }}
+          name: android-aab-${{ steps.version.outputs.version }}-${{ github.ref_name }}
           path: ${{ steps.build_paths.outputs.aab_path }}
-#          retention-days: 30
+          retention-days: 30
 
   release:
     name: Create GitHub Release
@@ -179,7 +202,13 @@ jobs:
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
-          name: android-apk-${{ needs.build.outputs.version }}
+          name: android-apk-${{ needs.build.outputs.version }}-${{ github.ref_name }}
+          path: ./artifacts
+
+      - name: Download AAB artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab-${{ needs.build.outputs.version }}-${{ github.ref_name }}
           path: ./artifacts
 
       - name: Generate changelog
@@ -204,15 +233,25 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./artifacts/app-release.apk"
-          tag: v${{ needs.build.outputs.version }}
-          name: "Release v${{ needs.build.outputs.version }}"
+          artifacts: |
+            ./artifacts/${{ needs.build.outputs.apk_name }}
+            ./artifacts/${{ needs.build.outputs.aab_name }}
+          tag: v${{ needs.build.outputs.version }}-${{ github.ref_name }}
+          name: "Release v${{ needs.build.outputs.version }} (${{ github.ref_name }})"
           body: |
             ## What's Changed
             ${{ steps.changelog.outputs.changelog }}
             
-            ## Download
-            - **Android APK**: [Download](https://github.com/${{ github.repository }}/releases/download/v${{ needs.build.outputs.version }}/app-release.apk)
+            ## Downloads
+            - **Android APK**: [Download APK](https://github.com/${{ github.repository }}/releases/download/v${{ needs.build.outputs.version }}-${{ github.ref_name }}/${{ needs.build.outputs.apk_name }})
+            - **Android AAB**: [Download AAB](https://github.com/${{ github.repository }}/releases/download/v${{ needs.build.outputs.version }}-${{ github.ref_name }}/${{ needs.build.outputs.aab_name }}) (for Play Store)
+            
+            ## Branch: ${{ github.ref_name }}
+            ${{ github.ref_name == 'staging' && '⚠️ **This is a staging release** - Use for testing only' || '✅ **Production release**' }}
+            
+            ## Files in this release:
+            - `${{ needs.build.outputs.apk_name }}` - Ready to install APK
+            - `${{ needs.build.outputs.aab_name }}` - App Bundle for Play Store
             
             ## Installation
             1. Download the APK file
@@ -220,17 +259,17 @@ jobs:
             3. Install the APK
             
             ---
-            **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ needs.build.outputs.version }}...v${{ needs.build.outputs.version }}
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ needs.build.outputs.version }}-${{ github.ref_name }}...v${{ needs.build.outputs.version }}-${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: ${{ github.ref == 'refs/heads/staging' }}
-          makeLatest: true
+          makeLatest: ${{ github.ref == 'refs/heads/main' }}
 
   deploy_android:
     name: Deploy to Google Play
     needs: [build, release]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && success() || github.ref == 'refs/heads/staging' && success()
+    if: github.ref == 'refs/heads/main' && success()
 
     steps:
       - name: Checkout code
@@ -239,7 +278,7 @@ jobs:
       - name: Download AAB artifact
         uses: actions/download-artifact@v4
         with:
-          name: android-aab-${{ needs.build.outputs.version }}
+          name: android-aab-${{ needs.build.outputs.version }}-${{ github.ref_name }}
           path: ./artifacts
 
       - name: Upload to Google Play Console
@@ -247,7 +286,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
           packageName: ${{ secrets.ANDROID_PACKAGE_NAME }}
-          releaseFiles: ./artifacts/app-release.aab
+          releaseFiles: ./artifacts/${{ needs.build.outputs.aab_name }}
           track: internal
           status: completed
           inAppUpdatePriority: 2
@@ -259,20 +298,26 @@ jobs:
     name: Notify Teams
     needs: [build, release, deploy_android]
     runs-on: ubuntu-latest
-    if: always() && github.ref == 'refs/heads/main' || always() && github.ref == 'refs/heads/staging'
+    if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')
 
     steps:
       - name: Notify Success
         if: needs.build.result == 'success' && needs.release.result == 'success'
         run: |
           echo "🎉 Build and release completed successfully!"
+          echo "Branch: ${{ github.ref_name }}"
           echo "Version: ${{ needs.build.outputs.version }}"
           echo "APK: Available in GitHub Releases"
-          echo "Play Store: Uploaded to internal track"
+          if [ "${{ github.ref_name }}" == "main" ]; then
+            echo "Play Store: Uploaded to internal track"
+          else
+            echo "Play Store: Skipped (staging branch)"
+          fi
 
       - name: Notify Failure
         if: needs.build.result == 'failure' || needs.release.result == 'failure' || needs.deploy_android.result == 'failure'
         run: |
           echo "❌ Build or deployment failed!"
+          echo "Branch: ${{ github.ref_name }}"
           echo "Please check the workflow logs for details."
           exit 1
