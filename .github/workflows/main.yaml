@@ -154,10 +154,10 @@ jobs:
 
       # Build Android
       - name: Build Android APK
-        run: flutter build apk --release --build-number=${{ github.run_number }}
+        run: flutter build apk --release
 
       - name: Build Android AAB
-        run: flutter build appbundle --release --build-number=${{ github.run_number }}
+        run: flutter build appbundle --release
 
       # Set build paths for other jobs
       - name: Set build paths
@@ -282,7 +282,7 @@ jobs:
       - name: Download AAB artifact
         uses: actions/download-artifact@v4
         with:
-          name: android-aab-${{ needs.build.outputs.version }}-${{ github.ref_name }}
+          name: android-aab-${{ needs.build.outputs.clean_version }}-${{ github.ref_name }}
           path: ./artifacts
 
       - name: Upload to Google Play Console
