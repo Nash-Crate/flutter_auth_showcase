@@ -82,6 +82,7 @@ jobs:
 
     outputs:
       version: ${{ steps.version.outputs.version }}
+      clean_version: ${{ steps.version.outputs.clean_version }}
       apk_name: ${{ steps.build_paths.outputs.apk_name }}
       aab_name: ${{ steps.build_paths.outputs.aab_name }}
       apk_path: ${{ steps.build_paths.outputs.apk_path }}
@@ -144,8 +145,12 @@ jobs:
         id: version
         run: |
           VERSION=$(yq -r '.version' pubspec.yaml)
+          # Clean version string (replace + with - for filename compatibility)
+          CLEAN_VERSION=$(echo "$VERSION" | sed 's/+/-/g')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Current version: $VERSION"
+          echo "clean_version=$CLEAN_VERSION" >> $GITHUB_OUTPUT
+          echo "Original version: $VERSION"
+          echo "Clean version: $CLEAN_VERSION"
 
       # Build Android
       - name: Build Android APK
@@ -174,18 +179,17 @@ jobs:
       - name: Create artifacts directory
         run: mkdir -p ./artifacts
 
-      # Upload artifacts for other jobs
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk-${{ steps.version.outputs.version }}-${{ github.ref_name }}
+          name: android-apk-${{ steps.version.outputs.clean_version }}-${{ github.ref_name }}
           path: ${{ steps.build_paths.outputs.apk_path }}
           retention-days: 30
 
       - name: Upload Android AAB
         uses: actions/upload-artifact@v4
         with:
-          name: android-aab-${{ steps.version.outputs.version }}-${{ github.ref_name }}
+          name: android-aab-${{ steps.version.outputs.clean_version }}-${{ github.ref_name }}
           path: ${{ steps.build_paths.outputs.aab_path }}
           retention-days: 30
 
@@ -202,13 +206,13 @@ jobs:
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
-          name: android-apk-${{ needs.build.outputs.version }}-${{ github.ref_name }}
+          name: android-apk-${{ needs.build.outputs.clean_version }}-${{ github.ref_name }}
           path: ./artifacts
 
       - name: Download AAB artifact
         uses: actions/download-artifact@v4
         with:
-          name: android-aab-${{ needs.build.outputs.version }}-${{ github.ref_name }}
+          name: android-aab-${{ needs.build.outputs.clean_version }}-${{ github.ref_name }}
           path: ./artifacts
 
       - name: Generate changelog
