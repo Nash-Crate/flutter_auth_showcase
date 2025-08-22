@@ -1,0 +1,278 @@
+name: "Build & Release"
+
+on:
+  push:
+    branches: [ 'main', 'staging' ]
+  pull_request:
+    branches: [ 'main' ]
+  # Manual workflow dispatch
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type'
+        required: false
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+env:
+  FLUTTER_VERSION: '3.32.x'
+  JAVA_VERSION: '17'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run code generation
+        run: |
+          dart run build_runner clean
+          dart run build_runner build -d
+
+      - name: Generate translations
+        run: dart run slang
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+
+  build:
+    name: Build & Release
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      apk_path: ${{ steps.build_paths.outputs.apk_path }}
+      aab_path: ${{ steps.build_paths.outputs.aab_path }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Verify Flutter installation
+        run: |
+          flutter --version
+          flutter doctor -v
+
+      # Android Keystore Setup
+      - name: Decode Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.2.4
+        with:
+          fileName: upload-keystore.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Create key.properties
+        run: |
+          cat > android/key.properties << EOF
+          storeFile=${{ steps.android_keystore.outputs.filePath }}
+          storePassword=${{ secrets.STORE_PASSWORD }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          EOF
+
+      # Dependencies and Code Generation
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run code generation
+        run: |
+          flutter packages pub run build_runner clean
+          flutter packages pub run build_runner build --delete-conflicting-outputs
+
+      - name: Generate translations
+        run: flutter pub run slang
+
+      # Version Management
+      - name: Get version from pubspec.yaml
+        id: version
+        run: |
+          VERSION=$(yq -r '.version' pubspec.yaml)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $VERSION"
+
+      # Build Android
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Build Android AAB
+        run: flutter build appbundle --release
+
+      # Set build paths for other jobs
+      - name: Set build paths
+        id: build_paths
+        run: |
+          echo "apk_path=build/app/outputs/flutter-apk/app-release.apk" >> $GITHUB_OUTPUT
+          echo "aab_path=build/app/outputs/bundle/release/app-release.aab" >> $GITHUB_OUTPUT
+
+      # Upload artifacts for other jobs
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk-${{ steps.version.outputs.version }}
+          path: ${{ steps.build_paths.outputs.apk_path }}
+#          retention-days: 30
+
+      - name: Upload Android AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-aab-${{ steps.version.outputs.version }}
+          path: ${{ steps.build_paths.outputs.aab_path }}
+#          retention-days: 30
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk-${{ needs.build.outputs.version }}
+          path: ./artifacts
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Generate changelog from commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            CHANGELOG=$(git log $LAST_TAG..HEAD --pretty=format:"- %s" --grep="^feat\|^fix\|^docs\|^style\|^refactor\|^test\|^chore" | head -20)
+          else
+            CHANGELOG=$(git log --pretty=format:"- %s" --grep="^feat\|^fix\|^docs\|^style\|^refactor\|^test\|^chore" | head -20)
+          fi
+          
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="- Initial release"
+          fi
+          
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./artifacts/app-release.apk"
+          tag: v${{ needs.build.outputs.version }}
+          name: "Release v${{ needs.build.outputs.version }}"
+          body: |
+            ## What's Changed
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ## Download
+            - **Android APK**: [Download](https://github.com/${{ github.repository }}/releases/download/v${{ needs.build.outputs.version }}/app-release.apk)
+            
+            ## Installation
+            1. Download the APK file
+            2. Enable "Unknown sources" in your Android settings
+            3. Install the APK
+            
+            ---
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ needs.build.outputs.version }}...v${{ needs.build.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: ${{ github.ref == 'refs/heads/staging' }}
+          makeLatest: true
+
+  deploy_android:
+    name: Deploy to Google Play
+    needs: [build, release]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && success()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download AAB artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab-${{ needs.build.outputs.version }}
+          path: ./artifacts
+
+      - name: Upload to Google Play Console
+        uses: r0adkll/upload-google-play@v1.1.3
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
+          packageName: ${{ secrets.ANDROID_PACKAGE_NAME }}
+          releaseFiles: ./artifacts/app-release.aab
+          track: internal
+          status: completed
+          inAppUpdatePriority: 2
+          userFraction: 0.5
+          whatsNewDirectory: distribution/whatsnew
+          mappingFile: build/app/outputs/mapping/release/mapping.txt
+
+  notify:
+    name: Notify Teams
+    needs: [build, release, deploy_android]
+    runs-on: ubuntu-latest
+    if: always() && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Notify Success
+        if: needs.build.result == 'success' && needs.release.result == 'success'
+        run: |
+          echo "🎉 Build and release completed successfully!"
+          echo "Version: ${{ needs.build.outputs.version }}"
+          echo "APK: Available in GitHub Releases"
+          echo "Play Store: Uploaded to internal track"
+
+      - name: Notify Failure
+        if: needs.build.result == 'failure' || needs.release.result == 'failure' || needs.deploy_android.result == 'failure'
+        run: |
+          echo "❌ Build or deployment failed!"
+          echo "Please check the workflow logs for details."
+          exit 1
