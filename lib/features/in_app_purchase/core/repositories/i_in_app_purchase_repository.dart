@@ -4,6 +4,9 @@ import 'package:fpdart/fpdart.dart';
 
 /// Interface for the InAppPurchase repository.
 mixin IInAppPurchaseRepository {
+  /// initialize the in-app purchase functionality
+  Future<Either<Failure, Unit>> initialize();
+
   /// listen to the purchase updates stream
   Stream<Either<Failure, List<String>>> purchaseUpdates();
 

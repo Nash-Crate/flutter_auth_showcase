@@ -5,6 +5,9 @@ enum InAppPurchaseStatus {
   /// idle state
   idle,
 
+  /// initializing state
+  initializing,
+
   /// processing state
   processing,
 

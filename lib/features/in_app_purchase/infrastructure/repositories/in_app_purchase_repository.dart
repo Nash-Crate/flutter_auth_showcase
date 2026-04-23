@@ -12,6 +12,11 @@ class InAppPurchaseRepository implements IInAppPurchaseRepository {
   final InAppPurchaseRemoteDataSource _remoteDataSource;
 
   @override
+  Future<Either<Failure, Unit>> initialize() {
+    return _remoteDataSource.initialize();
+  }
+
+  @override
   Future<Either<Failure, List<PurchasableProduct>>> getAvailableProducts() {
     return _remoteDataSource.getAvailableProducts();
   }

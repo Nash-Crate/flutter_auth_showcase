@@ -13,13 +13,29 @@ part 'in_app_purchase_state.dart';
 @singleton
 class InAppPurchaseCubit extends Cubit<InAppPurchaseState> {
   /// Constructor
-  InAppPurchaseCubit(this._purchaseCoins, this._getAvailableProducts)
+  InAppPurchaseCubit(this._initializeInAppPurchase, this._purchaseCoins, this._getAvailableProducts)
     : super(InAppPurchaseState.initial()) {
-    getProducts();
+    initializeInAppPurchase();
   }
 
+  final InitializeInAppPurchase _initializeInAppPurchase;
   final PurchaseCoins _purchaseCoins;
   final GetAvailableProducts _getAvailableProducts;
+
+  /// Initialize in-app purchase
+  Future<void> initializeInAppPurchase() async {
+    emit(state.copyWith(status: InAppPurchaseStatus.initializing));
+
+    final res = await _initializeInAppPurchase();
+
+    if (res.isRight()) {
+      await getProducts();
+    } else if (res.isLeft()) {
+      addError(res.asL.message);
+    }
+
+    emit(state.copyWith(status: InAppPurchaseStatus.idle));
+  }
 
   /// get all available products
   Future<void> getProducts() async {
